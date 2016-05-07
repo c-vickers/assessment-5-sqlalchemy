@@ -23,6 +23,10 @@ class Model(db.Model):
 
     brand=db.relationship("Brand", backref="models")
 
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+        return "**Model id=%s name=%s brand=%s**" % (self.id, self.name, self.brand_name) 
+
 
 class Brand(db.Model):
 
@@ -33,6 +37,11 @@ class Brand(db.Model):
     founded = db.Column(db.Integer, nullable=True)
     headquarters = db.Column(db.String(50), nullable=True)
     discontinued = db.Column(db.Integer, nullable=True)
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+        return "**Brand id=%s name=%s" % (self.id, self.name, self.brand_name) 
+
 
 
 # End Part 1
@@ -53,7 +62,7 @@ def connect_to_db(app):
 
     # Configure to use our SQLite database
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres:///cars'
-    app.config['SQLALCHEMY_ECHO'] = True
+    # app.config['SQLALCHEMY_ECHO'] = True
     db.app = app
     db.init_app(app)
 
