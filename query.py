@@ -27,9 +27,11 @@ Brand.query.get(8)
 # Get all models with the **name** Corvette and the **brand_name** Chevrolet.
 Model.query.filter_by(name='Corvette', brand_name='Chevrolet').all()
 
+
+#Hi Anne! The below query kept failing with ascii error for me. I dropped my database, changed the .sql file to remove special character from Citroen and re-created the database and the query worked. Sorry if that was not the correct solution!
 # Get all models that are older than 1960.
 Model.query.filter(Model.year < 1960).all()
-#Hi Anne! The above query kept failing with as ascii error for me. I dropped my database, change the .sql file to remove special character from Citroen and re-created the database and the query worked. Sorry if that was not the correct solution.
+
 
 # Get all brands that were founded after 1920.
 Brand.query.filter(Brand.founded>1920).all()
@@ -59,25 +61,42 @@ def get_brands_summary():
     '''Prints out each brand name, and each model name for that brand
      using only ONE database query.'''
 
-     brands = db.session.query(Brand.name, Model.name).group_by(Brand.name).all()
+     brands = db.session.query(Model.brand_name, Model.name).order_by(Model.brand_name).all()
 
-     return brands
+     brand_dict = {}
 
-     # for brand in brands:
-     # 	print
+     for brand, model in brands:
+     	if brand not in brand_dict:
+     		brand_dict[brand] = [model]
+     	else:
+     		brand_dict[brand].append(model)
 
-    pass
+
+     # for brand, model in brands:
+     # 	print brand, model
+
+
+# ---------------------Part 2 Discussion Questions----------------------------
+#Question 1: What is the returned value and datatype of Brand.query.filter_by(name='Ford')?
+
+#Answer 1: Returned value is <flask_sqlalchemy.BaseQuery object at 0x11040e390>. Type is BaseQuery Object.
+
+
+#Question 2: In your own words, what is an association table, and what type of relationship (many to one, many to many, one to one, etc.) does an association table manage?
+
+#Answer 2: An association table is a table that acts as a link for many-to-many relationship tables utilizing foreign keys to establish the relationships.
+
 
 # -------------------------------------------------------------------
 
 
 # Part 2.5: Advanced and Optional
 def search_brands_by_name(mystr):
-    pass
+    return Brand.query.filter(Brand.name.like('%'+mystr+'%')).all
 
 
 def get_models_between(start_year, end_year):
-    pass
+    return Model.query.filter(Model.year > start_year, Model.year < end_year).all()
 
 # -------------------------------------------------------------------
 
