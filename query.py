@@ -71,6 +71,10 @@ def get_brands_summary():
      	else:
      		brand_dict[brand].append(model)
 
+     for brand, model in brand_dict.items():
+     	print '\n' + brand
+     	print '\n'.join(model)
+
 
      # for brand, model in brands:
      # 	print brand, model
