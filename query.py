@@ -28,16 +28,24 @@ Brand.query.get(8)
 Model.query.filter_by(name='Corvette', brand_name='Chevrolet').all()
 
 # Get all models that are older than 1960.
+# Model.query.filter(Model.year < 1960).all() This is giving a weird error.
 
 # Get all brands that were founded after 1920.
+Brand.query.filter(Brand.founded>1920).all()
 
 # Get all models with names that begin with "Cor".
+Model.query.filter(Model.name.like('Cor%')).all()
 
 # Get all brands with that were founded in 1903 and that are not yet discontinued.
+Brand.query.filter_by(founded=1903, discontinued = None).all()
 
 # Get all brands with that are either discontinued or founded before 1950.
+Brand.query.filter((Brand.discontinued != None) | (Brand.founded < 1950)).all()
 
-# Get any model whose brand_name is not Chevrolet.
+# Get any model whose brand_name is not Chevrolet. -- below both failing
+# Model.query.filter(~Model.brand_name == 'Chevrolet').all()
+# Model.query.filter(db.not_(Model.brand_name == 'Chevrolet')).all()
+
 
 # Fill in the following functions. (See directions for more info.)
 
