@@ -28,7 +28,8 @@ Brand.query.get(8)
 Model.query.filter_by(name='Corvette', brand_name='Chevrolet').all()
 
 # Get all models that are older than 1960.
-# Model.query.filter(Model.year < 1960).all() This is giving a weird error.
+Model.query.filter(Model.year < 1960).all()
+#Hi Anne! The above query kept failing with as ascii error for me. I dropped my database, change the .sql file to remove special character from Citroen and re-created the database and the query worked. Sorry if that was not the correct solution.
 
 # Get all brands that were founded after 1920.
 Brand.query.filter(Brand.founded>1920).all()
@@ -42,9 +43,8 @@ Brand.query.filter_by(founded=1903, discontinued = None).all()
 # Get all brands with that are either discontinued or founded before 1950.
 Brand.query.filter((Brand.discontinued != None) | (Brand.founded < 1950)).all()
 
-# Get any model whose brand_name is not Chevrolet. -- below both failing
-# Model.query.filter(~Model.brand_name == 'Chevrolet').all()
-# Model.query.filter(db.not_(Model.brand_name == 'Chevrolet')).all()
+# Get any model whose brand_name is not Chevrolet.
+Model.query.filter(Model.brand_name != 'Chevrolet').all()
 
 
 # Fill in the following functions. (See directions for more info.)
@@ -53,13 +53,18 @@ def get_model_info(year):
     '''Takes in a year, and prints out each model, brand_name, and brand
     headquarters for that year using only ONE database query.'''
 
-    return db.session.query(Model.name, Model.brand_name, Brand.headquarters).filter(Model.year = year).all()
+    return db.session.query(Model.name, Model.brand_name, Brand.headquarters).filter(Model.year == year).all()
 
 def get_brands_summary():
     '''Prints out each brand name, and each model name for that brand
      using only ONE database query.'''
 
-     
+     brands = db.session.query(Brand.name, Model.name).group_by(Brand.name).all()
+
+     return brands
+
+     # for brand in brands:
+     # 	print
 
     pass
 
